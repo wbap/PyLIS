@@ -1,0 +1,7 @@
+*.pyc
+*.pkl
+*.egg-info
+*.py~
+venv
+hsr_description
+hsr_meshes
