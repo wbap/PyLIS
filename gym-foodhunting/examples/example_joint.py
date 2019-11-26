@@ -18,6 +18,7 @@ paramNames = [
     #'hand motor',
     #'hand left proximal', 'hand left spring proximal', 'hand left mimic distal', 'hand left distal',
     #'hand right proximal', 'hand right spring proximal', 'hand right mimic distal', 'hand right distal'
+    'gripper left', 'gripper right',
 ]
 
 # for R2D2
@@ -28,8 +29,7 @@ paramNames = [
 # ]
 
 def main():
-    env = gym.make('FoodHuntingHSRGUI-v2')
-    # env = gym.make('FoodHuntingHSRTestGUI-v0')
+    env = gym.make('FoodHuntingHSRTestGUI-v1')
     params = [ p.addUserDebugParameter(paramName, -1.0, 1.0, 0.0) for paramName in paramNames ]
     obs = env.reset()
     while True:
