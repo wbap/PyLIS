@@ -18,8 +18,7 @@ def getAction():
         return 0
 
 def main():
-    env = gym.make('FoodHuntingHSRDiscreteGUI-v7')
-    # env = gym.make('FoodHuntingDiscrete-v0')
+    env = gym.make('FoodHuntingHSRDiscreteGUI-v0')
     print(env.observation_space, env.action_space)
     obs = env.reset()
     while True:
