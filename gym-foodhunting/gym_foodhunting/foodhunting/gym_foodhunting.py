@@ -247,7 +247,7 @@ class HSR(Robot):
     def getActionSpace(cls):
         """Return action_space for gym Env class.
         """
-        n = 11
+        n = 13
         low = -1.0 * np.ones(n)
         high = 1.0 * np.ones(n)
         return gym.spaces.Box(low=low, high=high, dtype=np.float32)
@@ -262,11 +262,13 @@ class HSR(Robot):
         self.setArmPosition(action[6], action[7], action[8])
         self.setWristPosition(action[9], action[10])
         # self.setHandPosition(action[11], action[12], action[13], action[14], action[15], action[16], action[17], action[18], action[19]) # TODO
+        self.setGripperPosition(action[11], action[12])
 
     def isContact(self, bodyId):
-        """Return True if HSR's wrist contacted with other objects.
+        """Return True if HSR contacted with other objects.
         """
-        cps = p.getContactPoints(bodyA=self.robotId, bodyB=bodyId, linkIndexA=27) # only for wrist_roll_link
+        # cps = p.getContactPoints(bodyA=self.robotId, bodyB=bodyId, linkIndexA=27) # only for wrist_roll_link
+        cps = p.getContactPoints(bodyA=self.robotId, bodyB=bodyId)
         return len(cps) > 0
 
     # HSR specific methods
@@ -282,7 +284,7 @@ class HSR(Robot):
         self.setJointPosition(1, roll)
 
     def setTorsoLiftPosition(self, lift):
-        """Set base roll position.
+        """Set torso lift position.
         """
         self.setJointPosition(12, lift)
 
@@ -318,6 +320,43 @@ class HSR(Robot):
     #     self.setJointPosition(39, rightMimicDistal)
     #     self.setJointPosition(40, rightDistal)
 
+    def setGripperPosition(self, left, right):
+        """Set gripper position.
+        """
+        self.setJointPosition(30, left)
+        self.setJointPosition(32, right)
+
+    def getBaseRollPosition(self):
+        """Get base roll position.
+        """
+        return self.getJointPosition(1)
+
+    def getTorsoLiftPosition(self):
+        """Get torso lift position.
+        """
+        return self.getJointPosition(12)
+
+    def getHeadPosition(self):
+        """Get head position.
+        """
+        return self.getJointPosition(13), self.getJointPosition(14)
+
+    def getArmPosition(self):
+        """Get arm position.
+        """
+        return self.getJointPosition(23), self.getJointPosition(24), self.getJointPosition(25)
+
+    def getWristPosition(self):
+        """Get wrist position.
+        """
+        return self.getJointPosition(26), self.getJointPosition(27)
+
+    def getGripperPosition(self):
+        """Get gripper position.
+        """
+        return self.getJointPosition(30),  self.getJointPosition(32)
+
+
 class HSRSimple(HSR):
     @classmethod
     def getActionSpace(cls):
@@ -337,6 +376,7 @@ class HSRSimple(HSR):
         self.setHeadPosition(0.0, -0.5)
         self.setArmPosition(0.5, -1.0, 0.0)
         self.setWristPosition(0.5, 0.0)
+        self.setGripperPosition(1.0, 1.0)
 
 class HSRDiscrete(HSR):
     ACTIONS = [ [ 1.0, 1.0], [-1.0, 1.0], [1.0, -1.0], [0.0, 0.0] ]
@@ -356,6 +396,7 @@ class HSRDiscrete(HSR):
         self.setHeadPosition(0.0, -0.5)
         self.setArmPosition(0.5, -1.0, 0.0)
         self.setWristPosition(0.5, 0.0)
+        self.setGripperPosition(1.0, 1.0)
 
 class R2D2(Robot):
     URDF_PATH = 'r2d2.urdf'
@@ -392,18 +433,34 @@ class R2D2(Robot):
 
     # R2D2 specific methods
     def setWheelVelocity(self, left, right):
+        """Set wheel's velocity.
+        """
         self.setJointVelocity(2, right, -0.1)
         self.setJointVelocity(3, right, -0.1)
         self.setJointVelocity(6, left, -0.1)
         self.setJointVelocity(7, left, -0.1)
 
     def setGripperPosition(self, extension, left, right):
+        """Set gripper position.
+        """
         self.setJointPosition(8, extension)
         self.setJointPosition(9, left)
         self.setJointPosition(11, right)
 
     def setHeadPosition(self, pan):
+        """Set head position.
+        """
         self.setJointPosition(13, pan)
+
+    def getGripperPosition(self):
+        """Get gripper position.
+        """
+        return self.getJointPosition(8), self.getJointPosition(9), self.getJointPosition(11)
+
+    def getHeadPosition(self):
+        """Get head position.
+        """
+        return self.getJointPosition(13)
 
 class R2D2Simple(R2D2):
     @classmethod
@@ -445,7 +502,7 @@ class FoodHuntingEnv(gym.Env):
     GRAVITY = -10.0
     BULLET_STEPS = 120 # p.setTimeStep(1.0 / 240.0), so 1 gym step == 0.5 sec.
 
-    def __init__(self, render=False, robot_model=R2D2, max_steps=500, num_foods=3, num_fakes=0, object_size=1.0, object_radius_scale=1.0, object_radius_offset=1.0, object_angle_scale=1.0, blur_kernel=None, drop_frame=None, rain_noise=None):
+    def __init__(self, render=False, robot_model=R2D2, max_steps=500, num_foods=3, num_fakes=0, object_size=1.0, object_radius_scale=1.0, object_radius_offset=1.0, object_angle_scale=1.0):
         """Initialize environment.
         """
         ### gym variables
@@ -466,9 +523,6 @@ class FoodHuntingEnv(gym.Env):
         self.object_radius_scale = object_radius_scale
         self.object_radius_offset = object_radius_offset
         self.object_angle_scale = object_angle_scale
-        self.blur_kernel = blur_kernel
-        self.drop_frame = drop_frame
-        self.rain_noise = rain_noise
         self.plane_id = None
         self.robot = None
         self.object_ids = []
@@ -502,6 +556,7 @@ class FoodHuntingEnv(gym.Env):
         for i in range(self.BULLET_STEPS):
             p.stepSimulation()
         obs = self._getObservation()
+        #self.robot.printAllJointInfo()
         return obs
 
     def step(self, action):
@@ -521,6 +576,8 @@ class FoodHuntingEnv(gym.Env):
         if done:
             info['episode'] = { 'r': self.episode_rewards, 'l': self.steps }
             # print(self.episode_rewards, self.steps)
+        #print(self.robot.getBaseRollPosition(), self.robot.getTorsoLiftPosition(), self.robot.getHeadPosition(), self.robot.getArmPosition(), self.robot.getWristPosition(), self.robot.getGripperPosition()) # for HSR debug
+        #print(self.robot.getHeadPosition(), self.robot.getGripperPosition()) # for R2D2 debug
         return obs, reward, done, info
 
     def render(self, mode='human', close=False):
@@ -546,31 +603,20 @@ class FoodHuntingEnv(gym.Env):
         return reward
 
     def _getObservation(self):
+        """Get observation.
+        """
         obs = self.robot.getObservation()
-        if self.blur_kernel is not None:
-            # normalized box filter
-            obs = cv2.blur(obs, self.blur_kernel)
-        if self.drop_frame is not None:
-            if self.np_random.rand() < self.drop_frame:
-                obs = np.zeros_like(obs) # black
-        if self.rain_noise is not None:
-            hw = [ (h, w) for h in range(self.robot.CAMERA_PIXEL_HEIGHT) for w in range(self.robot.CAMERA_PIXEL_WIDTH) ]
-            self.np_random.shuffle(hw)
-            len_hw = len(hw)
-            for i, (h, w) in enumerate(hw):
-                # if self.np_random.rand() < self.rain_noise:
-                if i  < self.rain_noise * len_hw:
-                    obs[h, w] = np.ones_like(obs[h, w])
-        if self.render:
-            cv2.imshow('after rgb', cv2.cvtColor(obs[ :, :, :-1 ], cv2.COLOR_RGB2BGR))
-            # cv2.imshow('after depth', obs[ :, :, 3 ])
         return obs
 
     def _isFood(self, object_id):
+        """Check if object_id is a food.
+        """
         baseLink, urdfPath = p.getBodyInfo(object_id)
         return urdfPath == b'food_sphere.urdf' # otherwise, fake
 
     def _isDone(self):
+        """Check if episode is done.
+        """
         available_object_ids = [ object_id for object_id in self.object_ids if self._isFood(object_id) ]
         return self.steps >= self.max_steps or len(available_object_ids) <= 0
 
