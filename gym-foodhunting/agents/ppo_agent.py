@@ -62,37 +62,6 @@ def learn(env_name, seed, load_file, save_file, tensorboard_log, total_timesteps
     model.save(save_file)
     env.close()
 
-
-def play(env_name, seed, load_file, total_timesteps, n_cpu):
-    np.set_printoptions(precision=5)
-    def padding_obss(obss, dummy_obss):
-        dummy_obss[ 0, :, :, : ] = obss
-        return dummy_obss
-    # if it's GUI mode, number of env is changed to 1 to reduce GUI windows.
-    # but trained LSTM model cannot change number of env.
-    # so it needs to reshape observation by padding dummy data.
-    isGUI = env_name.find('GUI') != -1
-    dummy_obss = np.zeros((n_cpu, 64, 64, 4)) if isGUI else None
-    env = SubprocVecEnv([make_env(env_name, i, seed) for i in range(1 if isGUI else n_cpu)])
-    model = PPO2.load(load_file, verbose=1)
-    obss = env.reset()
-    obss = padding_obss(obss, dummy_obss) if isGUI else obss
-    rewards_buf = []
-    steps_buf = []
-    # TODO: single
-    for i in range(total_timesteps):
-        actions, _states = model.predict(obss)
-        actions = actions[0:1] if isGUI else actions
-        obss, rewards, dones, infos = env.step(actions)
-        obss = padding_obss(obss, dummy_obss) if isGUI else obss
-        # env.render() # dummy
-        if dones.any():
-            rewards_buf.extend([ info['episode']['r'] for info in infos if 'episode' in info ])
-            steps_buf.extend([ info['episode']['l'] for info in infos if 'episode' in info ])
-            line = np.array([np.mean(rewards_buf), np.std(rewards_buf), np.mean(steps_buf), np.std(steps_buf)])
-            print(len(rewards_buf), line)
-    env.close()
-
 def play(env_name, seed, load_file, total_timesteps, n_cpu):
     np.set_printoptions(precision=5)
     def padding_obss(obss, dummy_obss):
@@ -119,8 +88,8 @@ def play(env_name, seed, load_file, total_timesteps, n_cpu):
             steps_buf.append(infos[0]['episode']['l'])
             line = np.array([np.mean(rewards_buf), np.std(rewards_buf), np.mean(steps_buf), np.std(steps_buf)])
             print(len(rewards_buf), line)
-            obss = env.reset()
-            obss = padding_obss(obss, dummy_obss)
+            #obss = env.reset()
+            #obss = padding_obss(obss, dummy_obss)
     env.close()
 
 if __name__ == '__main__':
