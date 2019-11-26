@@ -5,7 +5,7 @@ Gym environments and agents for food hunting in the 3D world.
 
 # Install
 
-I've tested on Mac OS X 10.13.6 (Python 3.6.5) and Ubuntu 16.04.
+I've tested on Mac OS X 10.13.6 (Python 3.7.5) and Ubuntu 16.04.
 
 Some packages need to install prerequisites. See these pages for more details.
 
@@ -30,23 +30,22 @@ pip install pybullet
 
 # You may need to install prerequisites.
 # See https://www.tensorflow.org/install/pip for more details.
-pip install tensorflow # or tensorflow-gpu
+pip install tensorflow==1.14 # or tensorflow-gpu
 
 # You may need to install prerequisites.
 # See https://github.com/hill-a/stable-baselines#installation for more details.
 pip install stable-baselines
 
-# If you want to use original URDF file by TRI, clone it from their original repository instead.
-# git clone https://github.com/ToyotaResearchInstitute/hsr_description.git
-git clone https://github.com/susumuota/hsr_description.git
-
 git clone https://github.com/ToyotaResearchInstitute/hsr_meshes.git
+cp -rp hsr_meshes venv/lib/python3.7/site-packages/pybullet_data
 
-cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.6/site-packages/pybullet_data
-cp -rp hsr_meshes venv/lib/python3.6/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.6/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.6/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.6/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/hsrb4s.urdf venv/lib/python3.7/site-packages/pybullet_data
+# If you want to use original URDF file by TRI,
+# git clone https://github.com/ToyotaResearchInstitute/hsr_description.git
+# cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.7/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.7/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.7/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.7/site-packages/pybullet_data
 
 cd gym-foodhunting
 pip install -e .
@@ -209,14 +208,10 @@ FoodHuntingHSR-v0
 FoodHuntingHSRGUI-v0
 FoodHuntingHSR-v1
 FoodHuntingHSRGUI-v1
-FoodHuntingHSR-v2
-FoodHuntingHSRGUI-v2
 FoodHuntingHSRDiscrete-v0
 FoodHuntingHSRDiscreteGUI-v0
 FoodHuntingHSRDiscrete-v1
 FoodHuntingHSRDiscreteGUI-v1
-FoodHuntingHSRDiscrete-v2
-FoodHuntingHSRDiscreteGUI-v2
 ```
 
 # Author
