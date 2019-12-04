@@ -20,6 +20,8 @@ See [wiki](https://github.com/wbap/PyLIS/wiki) for more details.
 
 # Demo Videos
 
+Click on thumbnail to play youtube video.
+
 ## Manipulator Demo
 
 [![PyLIS manipulator demo 1](https://img.youtube.com/vi/5H6bFS57Uqw/0.jpg)](https://www.youtube.com/watch?v=5H6bFS57Uqw)
