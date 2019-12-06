@@ -86,6 +86,13 @@ Bullet Physics SDK.
 - https://github.com/bulletphysics/bullet3
 
 
+# Acknowledgment
+
+This work was supported by MEXT KAKENHI Grant Number 17H06308, Grant-in-Aid for Scientific Research on Innovative Areas, Brain information dynamics underlying multi-area interconnectivity and parallel processing.
+
+- http://brainfodynamics.umin.jp/
+
+
 # Author
 
 Susumu OTA
