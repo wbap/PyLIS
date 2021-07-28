@@ -5,15 +5,14 @@ Gym environments and agents for food hunting in the 3D world.
 
 # Install
 
-I've tested on Mac OS X 10.13.6 (Python 3.7.5) and Ubuntu 16.04.
+I've tested on Mac OS X 10.5 (Python 3.9.2).
 
 Some packages need to install prerequisites. See these pages for more details.
 
 - https://www.scipy.org/install.html
 - https://github.com/openai/gym#installation
-- https://opencv.org/
 - https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit
-- https://github.com/DLR-RM/stable-baselines3
+- https://github.com/DLR-RM/stable-baselines3#installation
 
 ```
 git clone https://github.com/wbap/PyLIS.git
@@ -26,8 +25,6 @@ pip install numpy
 
 pip install gym
 
-pip install opencv-python
-
 pip install pybullet
 
 # You may need to install prerequisites.
@@ -35,15 +32,15 @@ pip install pybullet
 pip install stable-baselines3
 
 git clone https://github.com/ToyotaResearchInstitute/hsr_meshes.git
-cp -rp hsr_meshes venv/lib/python3.7/site-packages/pybullet_data
+cp -rp hsr_meshes venv/lib/python3.9/site-packages/pybullet_data
 
-cp -p gym-foodhunting/urdf/hsrb4s.urdf venv/lib/python3.7/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/hsrb4s.urdf venv/lib/python3.9/site-packages/pybullet_data
 # If you want to use original URDF file by TRI,
 # git clone https://github.com/ToyotaResearchInstitute/hsr_description.git
-# cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.7/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.7/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.7/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.7/site-packages/pybullet_data
+# cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.9/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.9/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.9/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.9/site-packages/pybullet_data
 
 cd gym-foodhunting
 pip install -e .
@@ -57,7 +54,6 @@ cd ..
 pip uninstall gym-foodhunting
 
 pip uninstall stable-baselines3
-pip uninstall opencv-python
 pip uninstall pybullet
 pip uninstall gym
 pip uninstall numpy

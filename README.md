@@ -59,10 +59,10 @@ Bullet Real-Time Physics Simulation
 - https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit
 - https://github.com/bulletphysics/bullet3
 
-Stable Baselines
+Stable Baselines3
 
-- https://github.com/hill-a/stable-baselines
-- https://stable-baselines.readthedocs.io/
+- https://github.com/DLR-RM/stable-baselines3
+- https://stable-baselines3.readthedocs.io/
 
 
 # Robot models
