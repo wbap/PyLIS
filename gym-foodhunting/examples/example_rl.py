@@ -4,13 +4,13 @@ import argparse
 import gym
 import gym_foodhunting
 
-from stable_baselines.common.policies import CnnPolicy
-from stable_baselines.common.vec_env import DummyVecEnv
-from stable_baselines import PPO2
+from stable_baselines3.ppo import CnnPolicy
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3 import PPO
 
 def learn(env_name, save_file, total_timesteps):
     env = DummyVecEnv([lambda: gym.make(env_name)])
-    model = PPO2(CnnPolicy, env, verbose=1)
+    model = PPO(CnnPolicy, env, verbose=1)
     model.learn(total_timesteps=total_timesteps)
     model.save(save_file)
     del model
@@ -18,7 +18,7 @@ def learn(env_name, save_file, total_timesteps):
 
 def play(env_name, load_file, total_timesteps):
     env = DummyVecEnv([lambda: gym.make(env_name)])
-    model = PPO2.load(load_file, verbose=1)
+    model = PPO.load(load_file, verbose=1)
     obs = env.reset()
     for i in range(total_timesteps):
         action, _states = model.predict(obs)

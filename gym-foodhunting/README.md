@@ -11,9 +11,9 @@ Some packages need to install prerequisites. See these pages for more details.
 
 - https://www.scipy.org/install.html
 - https://github.com/openai/gym#installation
+- https://opencv.org/
 - https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit
-- https://www.tensorflow.org/install
-- https://github.com/hill-a/stable-baselines#installation
+- https://github.com/DLR-RM/stable-baselines3
 
 ```
 git clone https://github.com/wbap/PyLIS.git
@@ -26,15 +26,13 @@ pip install numpy
 
 pip install gym
 
+pip install opencv-python
+
 pip install pybullet
 
 # You may need to install prerequisites.
-# See https://www.tensorflow.org/install/pip for more details.
-pip install tensorflow==1.14 # or tensorflow-gpu
-
-# You may need to install prerequisites.
-# See https://github.com/hill-a/stable-baselines#installation for more details.
-pip install stable-baselines
+# See https://github.com/DLR-RM/stable-baselines3#installation for more details.
+pip install stable-baselines3
 
 git clone https://github.com/ToyotaResearchInstitute/hsr_meshes.git
 cp -rp hsr_meshes venv/lib/python3.7/site-packages/pybullet_data
@@ -58,7 +56,8 @@ cd ..
 ```
 pip uninstall gym-foodhunting
 
-pip uninstall stable-baselines
+pip uninstall stable-baselines3
+pip uninstall opencv-python
 pip uninstall pybullet
 pip uninstall gym
 pip uninstall numpy
@@ -114,13 +113,13 @@ import argparse
 import gym
 import gym_foodhunting
 
-from stable_baselines.common.policies import CnnPolicy
-from stable_baselines.common.vec_env import DummyVecEnv
-from stable_baselines import PPO2
+from stable_baselines3.ppo import CnnPolicy
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3 import PPO
 
 def learn(env_name, save_file, total_timesteps):
     env = DummyVecEnv([lambda: gym.make(env_name)])
-    model = PPO2(CnnPolicy, env, verbose=1)
+    model = PPO(CnnPolicy, env, verbose=1)
     model.learn(total_timesteps=total_timesteps)
     model.save(save_file)
     del model
@@ -128,7 +127,7 @@ def learn(env_name, save_file, total_timesteps):
 
 def play(env_name, load_file, total_timesteps):
     env = DummyVecEnv([lambda: gym.make(env_name)])
-    model = PPO2.load(load_file, verbose=1)
+    model = PPO.load(load_file, verbose=1)
     obs = env.reset()
     for i in range(total_timesteps):
         action, _states = model.predict(obs)

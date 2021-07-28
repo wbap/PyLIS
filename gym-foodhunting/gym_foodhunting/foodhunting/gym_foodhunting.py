@@ -56,7 +56,12 @@ class Robot:
     def getObservationSpace(cls):
         """Return observation_space for gym Env class.
         """
-        return gym.spaces.Box(low=0.0, high=1.0, shape=(Robot.CAMERA_PIXEL_HEIGHT, Robot.CAMERA_PIXEL_WIDTH, 4), dtype=np.float32)
+        # stable-baselines3's CNN policy observation must be [0, 255] and np.uint8
+        # see https://stable-baselines3.readthedocs.io/en/master/guide/custom_env.html
+        # see also getObservation
+        # for [0.0, 1.0] and np.float32
+        # return gym.spaces.Box(low=0.0, high=1.0, shape=(Robot.CAMERA_PIXEL_HEIGHT, Robot.CAMERA_PIXEL_WIDTH, 4), dtype=np.float32)
+        return gym.spaces.Box(low=0, high=255, shape=(Robot.CAMERA_PIXEL_HEIGHT, Robot.CAMERA_PIXEL_WIDTH, 4), dtype=np.uint8)
 
     @classmethod
     def getActionSpace(cls):
@@ -203,6 +208,10 @@ class Robot:
         rgb01 = np.clip(rgb * 0.00392156862, 0.0, 1.0) # rgb / 255.0, normalize
         obs = np.insert(rgb01, [3], np.clip(depth, 0.0, 1.0), axis=2)
         # obs = np.insert(obs, [4], seg, axis=2) # TODO: normalize
+        # stable-baselines3's CNN policy observation must be [0, 255] and np.uint8
+        # see https://stable-baselines3.readthedocs.io/en/master/guide/custom_env.html
+        # see also getObservationSpace
+        obs = np.array(np.clip(obs*255, 0, 255), dtype=np.uint8)
         return obs
 
     def printJointInfo(self, index):
