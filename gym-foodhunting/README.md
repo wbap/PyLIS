@@ -5,7 +5,7 @@ Gym environments and agents for food hunting in the 3D world.
 
 # Install
 
-I've tested on Mac OS X 10.5 (Python 3.9.2).
+I've tested on Mac OS X 12.3.1 (Python 3.10.3).
 
 Some packages need to install prerequisites. See these pages for more details.
 
@@ -32,15 +32,15 @@ pip install pybullet
 pip install stable-baselines3
 
 git clone https://github.com/ToyotaResearchInstitute/hsr_meshes.git
-cp -rp hsr_meshes venv/lib/python3.9/site-packages/pybullet_data
+cp -rp hsr_meshes venv/lib/python3.10/site-packages/pybullet_data
 
-cp -p gym-foodhunting/urdf/hsrb4s.urdf venv/lib/python3.9/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/hsrb4s.urdf venv/lib/python3.10/site-packages/pybullet_data
 # If you want to use original URDF file by TRI,
 # git clone https://github.com/ToyotaResearchInstitute/hsr_description.git
-# cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.9/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.9/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.9/site-packages/pybullet_data
-cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.9/site-packages/pybullet_data
+# cp -p hsr_description/robots/hsrb4s.urdf venv/lib/python3.10/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/r2d2.urdf venv/lib/python3.10/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_sphere.urdf venv/lib/python3.10/site-packages/pybullet_data
+cp -p gym-foodhunting/urdf/food_cube.urdf venv/lib/python3.10/site-packages/pybullet_data
 
 cd gym-foodhunting
 pip install -e .
